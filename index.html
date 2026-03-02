@@ -9,9 +9,8 @@
 
 <style>
 
-/* =====================
-   COLORS
-===================== */
+/* ================= COLORS ================= */
+
 :root{
   --bg:#fffaf2;
   --text:#333;
@@ -34,12 +33,9 @@ body{
 background:var(--bg);
 color:var(--text);
 transition:.4s;
-overflow-x:hidden;
 }
 
-/* =====================
-   LOADING SCREEN
-===================== */
+/* ================= LOADER ================= */
 
 #loader{
 position:fixed;
@@ -49,13 +45,10 @@ display:flex;
 justify-content:center;
 align-items:center;
 z-index:9999;
-transition:opacity .8s, visibility .8s;
+transition:.8s;
 }
 
-.loader-content{
-text-align:center;
-color:#7a4a00;
-}
+.loader-content{text-align:center;color:#7a4a00;}
 
 .potato{
 font-size:65px;
@@ -72,9 +65,7 @@ opacity:0;
 visibility:hidden;
 }
 
-/* =====================
-   NAVBAR
-===================== */
+/* ================= NAV ================= */
 
 nav{
 position:fixed;
@@ -99,7 +90,7 @@ font-size:20px;
 margin-left:15px;
 }
 
-/* HERO */
+/* ================= HERO ================= */
 
 .hero{
 height:100vh;
@@ -113,13 +104,14 @@ background:linear-gradient(135deg,#ffe8b6,#ffd27a);
 
 .hero h1{
 font-size:60px;
-animation:float 3s ease-in-out infinite;
+animation:float 3s infinite ease-in-out;
 }
 
 @keyframes float{
-0%,100%{transform:translateY(0);}
 50%{transform:translateY(-10px);}
 }
+
+/* BUTTON */
 
 .btn{
 margin-top:20px;
@@ -132,18 +124,16 @@ cursor:pointer;
 transition:.3s;
 }
 
-.btn:hover{
-transform:scale(1.1);
-}
+.btn:hover{transform:scale(1.1);}
 
-/* SECTION */
+/* ================= SECTION ================= */
 
 .section{
 padding:90px 40px;
 text-align:center;
 }
 
-/* FILTERS */
+/* FILTER */
 
 .filters button{
 margin:5px;
@@ -152,12 +142,6 @@ border:none;
 border-radius:20px;
 cursor:pointer;
 background:#eee;
-transition:.3s;
-}
-
-.filters button:hover{
-background:var(--accent);
-color:white;
 }
 
 /* MENU GRID */
@@ -169,9 +153,7 @@ gap:25px;
 margin-top:30px;
 }
 
-/* =====================
-   AESTHETIC CARDS
-===================== */
+/* ================= CARDS ================= */
 
 .card{
 position:relative;
@@ -179,29 +161,11 @@ padding:40px 20px;
 border-radius:20px;
 overflow:hidden;
 transition:.4s;
-backdrop-filter:blur(10px);
 }
 
-.fries{
-background:linear-gradient(135deg,#ffe29f,#ffa751);
-}
-
-.baked{
-background:linear-gradient(135deg,#fddb92,#d1a45a);
-}
-
-.snack{
-background:linear-gradient(135deg,#ffecd2,#fcb69f);
-}
-
-.card::before{
-content:"";
-position:absolute;
-inset:0;
-background:radial-gradient(circle at top left,
-rgba(255,255,255,.6),
-transparent 60%);
-}
+.fries{background:linear-gradient(135deg,#ffe29f,#ffa751);}
+.baked{background:linear-gradient(135deg,#fddb92,#d1a45a);}
+.snack{background:linear-gradient(135deg,#ffecd2,#fcb69f);}
 
 .card::after{
 content:"🥔";
@@ -213,25 +177,35 @@ opacity:.15;
 }
 
 .card:hover{
-transform:translateY(-12px) scale(1.03);
+transform:translateY(-10px) scale(1.03);
 box-shadow:0 15px 35px rgba(0,0,0,.15);
-}
-
-.card h3,
-.card p,
-.price{
-position:relative;
-z-index:2;
 }
 
 .price{
 display:block;
 margin-top:10px;
 font-weight:600;
-color:#7a4a00;
 }
 
-/* CART PANEL */
+/* PURCHASE BUTTON */
+
+.buyBtn{
+margin-top:15px;
+padding:10px 18px;
+border:none;
+border-radius:25px;
+background:var(--accent);
+color:white;
+cursor:pointer;
+font-weight:600;
+transition:.3s;
+}
+
+.buyBtn:hover{
+transform:scale(1.08);
+}
+
+/* ================= CART ================= */
 
 .cartPanel{
 position:fixed;
@@ -243,10 +217,14 @@ background:white;
 box-shadow:-5px 0 20px rgba(0,0,0,.2);
 padding:20px;
 transition:.4s;
+overflow:auto;
 }
 
-.cartPanel.open{
-right:0;
+.cartPanel.open{right:0;}
+
+#cartItems{
+margin:15px 0;
+padding-left:15px;
 }
 
 footer{
@@ -263,10 +241,10 @@ color:white;
 
 <!-- LOADER -->
 <div id="loader">
-  <div class="loader-content">
-    <div class="potato">🥔</div>
-    <h2>Loading Potato Aisle...</h2>
-  </div>
+<div class="loader-content">
+<div class="potato">🥔</div>
+<h2>Loading Potato Aisle...</h2>
+</div>
 </div>
 
 <nav>
@@ -286,49 +264,34 @@ color:white;
 <section class="section" id="menu">
 <h2>Potato Menu</h2>
 
-<div class="filters">
-<button onclick="filter('all')">All</button>
-<button onclick="filter('fries')">Fries</button>
-<button onclick="filter('baked')">Baked</button>
-<button onclick="filter('snack')">Snacks</button>
-</div>
-
 <div class="menu">
 
 <div class="card fries">
 <h3>Classic Fries</h3>
-<p>Crispy golden fries with signature seasoning.</p>
+<p>Crispy golden fries.</p>
 <span class="price">₱89</span>
+<button class="buyBtn" onclick="addToCart('Classic Fries',89)">Purchase</button>
 </div>
 
 <div class="card fries">
 <h3>Curly Fries</h3>
-<p>Spiral-cut potatoes with spicy crunch.</p>
+<p>Spiral-cut crispy potatoes.</p>
 <span class="price">₱119</span>
+<button class="buyBtn" onclick="addToCart('Curly Fries',119)">Purchase</button>
 </div>
 
 <div class="card baked">
 <h3>Baked Potato Deluxe</h3>
-<p>Oven-baked potato with butter & cheese.</p>
+<p>Oven baked with cheese.</p>
 <span class="price">₱149</span>
+<button class="buyBtn" onclick="addToCart('Baked Potato Deluxe',149)">Purchase</button>
 </div>
 
 <div class="card snack">
 <h3>Cheese Potato Bombs</h3>
-<p>Soft potato balls filled with melted cheese.</p>
+<p>Cheese-filled potato balls.</p>
 <span class="price">₱129</span>
-</div>
-
-<div class="card snack">
-<h3>Potato Nachos</h3>
-<p>Crispy potato slices topped with sauces.</p>
-<span class="price">₱139</span>
-</div>
-
-<div class="card baked">
-<h3>Loaded Potato Boat</h3>
-<p>Stuffed potato with creamy toppings.</p>
-<span class="price">₱159</span>
+<button class="buyBtn" onclick="addToCart('Cheese Potato Bombs',129)">Purchase</button>
 </div>
 
 </div>
@@ -336,7 +299,9 @@ color:white;
 
 <div class="cartPanel" id="cartPanel">
 <h2>Your Cart 🛒</h2>
-<p>Items coming soon...</p>
+<ul id="cartItems"></ul>
+<h3>Total: ₱<span id="total">0</span></h3>
+<button class="buyBtn" onclick="checkout()">Checkout</button>
 </div>
 
 <footer>
@@ -352,10 +317,12 @@ document.getElementById("loader").classList.add("hide");
 },1200);
 });
 
+/* DARK MODE */
 function toggleDark(){
 document.body.classList.toggle("dark");
 }
 
+/* CART PANEL */
 function toggleCart(){
 document.getElementById("cartPanel").classList.toggle("open");
 }
@@ -364,15 +331,43 @@ function scrollToMenu(){
 document.getElementById("menu").scrollIntoView({behavior:"smooth"});
 }
 
-function filter(type){
-document.querySelectorAll(".card").forEach(card=>{
-card.style.display =
-(type==="all"||card.classList.contains(type))
-?"block":"none";
+/* ================= CART SYSTEM ================= */
+
+let cart=[];
+let total=0;
+
+function addToCart(name,price){
+cart.push({name,price});
+total+=price;
+updateCart();
+}
+
+function updateCart(){
+const list=document.getElementById("cartItems");
+list.innerHTML="";
+
+cart.forEach(item=>{
+const li=document.createElement("li");
+li.textContent=`${item.name} - ₱${item.price}`;
+list.appendChild(li);
 });
+
+document.getElementById("total").textContent=total;
+}
+
+function checkout(){
+if(cart.length===0){
+alert("Your cart is empty 🥔");
+return;
+}
+
+alert("✅ Order placed! Thank you for choosing Potato Aisle!");
+cart=[];
+total=0;
+updateCart();
 }
 
 </script>
 
 </body>
-  </html>
+</html>
