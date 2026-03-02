@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Potato Aisle</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* =====================
+   COLORS
+===================== */
+:root{
+  --bg:#fffaf2;
+  --text:#333;
+  --accent:#ff9f1c;
+}
+
+body.dark{
+  --bg:#111;
+  --text:#eee;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+transition:.4s;
+overflow-x:hidden;
+}
+
+/* =====================
+   LOADING SCREEN
+===================== */
+
+#loader{
+position:fixed;
+inset:0;
+background:linear-gradient(135deg,#ffe8b6,#ffb347);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:9999;
+transition:opacity .8s, visibility .8s;
+}
+
+.loader-content{
+text-align:center;
+color:#7a4a00;
+}
+
+.potato{
+font-size:65px;
+animation:bounce 1.2s infinite;
+}
+
+@keyframes bounce{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-20px);}
+}
+
+#loader.hide{
+opacity:0;
+visibility:hidden;
+}
+
+/* =====================
+   NAVBAR
+===================== */
+
+nav{
+position:fixed;
+width:100%;
+display:flex;
+justify-content:space-between;
+padding:15px 40px;
+background:rgba(255,255,255,.7);
+backdrop-filter:blur(10px);
+z-index:1000;
+}
+
+.logo{
+font-weight:700;
+font-size:22px;
+color:var(--accent);
+}
+
+.toggle{
+cursor:pointer;
+font-size:20px;
+margin-left:15px;
+}
+
+/* HERO */
+
+.hero{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+background:linear-gradient(135deg,#ffe8b6,#ffd27a);
+}
+
+.hero h1{
+font-size:60px;
+animation:float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-10px);}
+}
+
+.btn{
+margin-top:20px;
+padding:14px 28px;
+border:none;
+border-radius:30px;
+background:var(--accent);
+color:white;
+cursor:pointer;
+transition:.3s;
+}
+
+.btn:hover{
+transform:scale(1.1);
+}
+
+/* SECTION */
+
+.section{
+padding:90px 40px;
+text-align:center;
+}
+
+/* FILTERS */
+
+.filters button{
+margin:5px;
+padding:8px 16px;
+border:none;
+border-radius:20px;
+cursor:pointer;
+background:#eee;
+transition:.3s;
+}
+
+.filters button:hover{
+background:var(--accent);
+color:white;
+}
+
+/* MENU GRID */
+
+.menu{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+margin-top:30px;
+}
+
+/* =====================
+   AESTHETIC CARDS
+===================== */
+
+.card{
+position:relative;
+padding:40px 20px;
+border-radius:20px;
+overflow:hidden;
+transition:.4s;
+backdrop-filter:blur(10px);
+}
+
+.fries{
+background:linear-gradient(135deg,#ffe29f,#ffa751);
+}
+
+.baked{
+background:linear-gradient(135deg,#fddb92,#d1a45a);
+}
+
+.snack{
+background:linear-gradient(135deg,#ffecd2,#fcb69f);
+}
+
+.card::before{
+content:"";
+position:absolute;
+inset:0;
+background:radial-gradient(circle at top left,
+rgba(255,255,255,.6),
+transparent 60%);
+}
+
+.card::after{
+content:"🥔";
+position:absolute;
+font-size:80px;
+right:10px;
+bottom:-10px;
+opacity:.15;
+}
+
+.card:hover{
+transform:translateY(-12px) scale(1.03);
+box-shadow:0 15px 35px rgba(0,0,0,.15);
+}
+
+.card h3,
+.card p,
+.price{
+position:relative;
+z-index:2;
+}
+
+.price{
+display:block;
+margin-top:10px;
+font-weight:600;
+color:#7a4a00;
+}
+
+/* CART PANEL */
+
+.cartPanel{
+position:fixed;
+right:-350px;
+top:0;
+width:300px;
+height:100%;
+background:white;
+box-shadow:-5px 0 20px rgba(0,0,0,.2);
+padding:20px;
+transition:.4s;
+}
+
+.cartPanel.open{
+right:0;
+}
+
+footer{
+text-align:center;
+padding:25px;
+background:#7a4a00;
+color:white;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-content">
+    <div class="potato">🥔</div>
+    <h2>Loading Potato Aisle...</h2>
+  </div>
+</div>
+
+<nav>
+<div class="logo">🥔 Potato Aisle</div>
+<div>
+<span class="toggle" onclick="toggleDark()">🌙</span>
+<span class="toggle" onclick="toggleCart()">🛒</span>
+</div>
+</nav>
+
+<section class="hero">
+<h1>Potato Aisle</h1>
+<p>The Ultimate Potato Experience</p>
+<button class="btn" onclick="scrollToMenu()">Explore Menu</button>
+</section>
+
+<section class="section" id="menu">
+<h2>Potato Menu</h2>
+
+<div class="filters">
+<button onclick="filter('all')">All</button>
+<button onclick="filter('fries')">Fries</button>
+<button onclick="filter('baked')">Baked</button>
+<button onclick="filter('snack')">Snacks</button>
+</div>
+
+<div class="menu">
+
+<div class="card fries">
+<h3>Classic Fries</h3>
+<p>Crispy golden fries with signature seasoning.</p>
+<span class="price">₱89</span>
+</div>
+
+<div class="card fries">
+<h3>Curly Fries</h3>
+<p>Spiral-cut potatoes with spicy crunch.</p>
+<span class="price">₱119</span>
+</div>
+
+<div class="card baked">
+<h3>Baked Potato Deluxe</h3>
+<p>Oven-baked potato with butter & cheese.</p>
+<span class="price">₱149</span>
+</div>
+
+<div class="card snack">
+<h3>Cheese Potato Bombs</h3>
+<p>Soft potato balls filled with melted cheese.</p>
+<span class="price">₱129</span>
+</div>
+
+<div class="card snack">
+<h3>Potato Nachos</h3>
+<p>Crispy potato slices topped with sauces.</p>
+<span class="price">₱139</span>
+</div>
+
+<div class="card baked">
+<h3>Loaded Potato Boat</h3>
+<p>Stuffed potato with creamy toppings.</p>
+<span class="price">₱159</span>
+</div>
+
+</div>
+</section>
+
+<div class="cartPanel" id="cartPanel">
+<h2>Your Cart 🛒</h2>
+<p>Items coming soon...</p>
+</div>
+
+<footer>
+<p>© 2026 Potato Aisle</p>
+</footer>
+
+<script>
+
+/* LOADER */
+window.addEventListener("load",()=>{
+setTimeout(()=>{
+document.getElementById("loader").classList.add("hide");
+},1200);
+});
+
+function toggleDark(){
+document.body.classList.toggle("dark");
+}
+
+function toggleCart(){
+document.getElementById("cartPanel").classList.toggle("open");
+}
+
+function scrollToMenu(){
+document.getElementById("menu").scrollIntoView({behavior:"smooth"});
+}
+
+function filter(type){
+document.querySelectorAll(".card").forEach(card=>{
+card.style.display =
+(type==="all"||card.classList.contains(type))
+?"block":"none";
+});
+}
+
+</script>
+
+</body>
+  </html>
